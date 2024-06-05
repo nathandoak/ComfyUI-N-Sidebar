@@ -24,7 +24,7 @@ class JSONConfigManager:
         if os.path.isfile(file_name):
             self.data = self.read_json_file()
         else:
-           
+            
             self.data = json.loads(self.initial_config)
             self.write_json_file()
 
@@ -244,7 +244,7 @@ async def s_get(request):
     result = {"panels": list_panels_array}
     return web.json_response(result, content_type='application/json')
 
- 
+
 
 @server.PromptServer.instance.routes.post("/sidebar/settings" )
 async def s_get(request):
@@ -288,9 +288,9 @@ async def s_get(request):
 
 
 
-    
-    
 
- 
+
+
+
 
 WEB_DIRECTORY = "./app"
