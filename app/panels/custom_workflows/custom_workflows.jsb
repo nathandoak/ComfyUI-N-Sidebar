@@ -317,7 +317,7 @@ var custom_workflows = (function () {
         setContextMenu(customMenuItemJSONOut, "#custom_workflows_main .sidebarItem");
         setContextMenu(customMenuItemJSON, "#custom_workflows_main .displayNamesList .sidebarItem");
     
-        // ORDER CUSTOM CATEGORIES
+        // Add Event Handlers
         const custom_workflows_main = document.getElementById("custom_workflows_main");
         
         custom_workflows_main.querySelectorAll(".sidebarCategory").forEach(function (item) {
@@ -330,28 +330,15 @@ var custom_workflows = (function () {
         custom_workflows_main.removeEventListener("drop", handleCustomWorkflowsMainDrop);
         custom_workflows_main.addEventListener("drop", handleCustomWorkflowsMainDrop);
     
-        //workflow drag and drop
-        custom_workflows_main.querySelectorAll(".sidebarItem").forEach(function (item) {
-            item.addEventListener("dragstart", handleDragStart);
-        });
-    
         sidebar.removeEventListener("dragstart", handleSidebarDragStart);
         sidebar.addEventListener("dragstart", handleSidebarDragStart);
     
         document.removeEventListener("drop", handleDocumentDropEvent);
         document.addEventListener("drop", handleDocumentDropEvent);
-    
-        // ORDER CUSTOM NODES
-        custom_workflows_main.querySelectorAll(".sidebarItem").forEach(function (item) {
-            item.addEventListener("dragstart", handleDragStart);
-        });
     }
 
 
-
-
-    // handler
-    
+    // Handlers
     function handleDragStart(event) {
         dragItem = event.target;
     }
