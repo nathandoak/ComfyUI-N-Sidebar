@@ -374,32 +374,47 @@ var custom_workflows = (function () {
     }
     
     async function handleDocumentDropEvent(event) {
-        //prevent default action
         event.preventDefault();
-        const sb_workflow_replace = localStorage.getItem('sb_workflow_replace') || "true";
-        if (draggedElement.id === 'sidebarWorkflowItem' && event.target.id === 'graph-canvas') {
-       
-            if (draggedElement.dataset.data === 'NaN') { return; }
+
+        if (draggedElement.id !== 'sidebarWorkflowItem') {
+            return;
+        }
+
+        const isCanvasTarget = event.target.id === 'graph-canvas';
+        const isCategoryOrListTarget = event.target.classList.contains('sidebarCategory') ||
+                                       event.target.classList.contains('displayNamesList');
+
+        if (isCanvasTarget) {
+            // load the selected workflow
+            if (draggedElement.dataset.data === 'NaN') {
+                return;
+            }
+
+            const sb_workflow_replace = localStorage.getItem('sb_workflow_replace') || "true";
             if (sb_workflow_replace=="true") {
                 const confirmation = confirm("This will replace the current workflow. Are you sure?");
-                if (!confirmation) { return; }
+
+                if (!confirmation) {
+                    return;
+                }
             }
+
             //post request to /sidebar/workflow with json with path
             const req = JSON.stringify({ action: 'load', path: draggedElement.dataset.data });
+            
             fetch('/sidebar/workflow', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: req
-            })
-            .then(response => response.json())
-            .then(data => {
-                app.loadGraphData(data);
-                draggedElement.dataset.data = NaN;
-            });
-    
-        } else if (draggedElement.id === 'sidebarWorkflowItem' && (event.target.classList.contains('sidebarCategory') || event.target.classList.contains('displayNamesList'))) {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: req
+                })
+                .then(response => response.json())
+                .then(data => {
+                    app.loadGraphData(data);
+                    draggedElement.dataset.data = NaN;
+                });
+        } else if (isCategoryOrListTarget) {
             const ulElement = event.target.querySelector('ul');
 
             if (ulElement) {
@@ -410,10 +425,7 @@ var custom_workflows = (function () {
     
             updateConfiguration('sb_workflowNodeMap', JSON.stringify(getCustomWorkflowStructure()));
             renderList("custom_workflows_main");
-        } 
-        
-        
-        else if (draggedElement.id === 'sidebarWorkflowItem' && event.target.parentElement.parentElement.classList.contains('sidebarCategory')) {
+        } else if (event.target.parentElement.parentElement.classList.contains('sidebarCategory')) {
             event.target.parentElement.insertBefore(draggedElement, event.target);
             updateConfiguration('sb_workflowNodeMap', JSON.stringify(getCustomWorkflowStructure()));
             renderList("custom_workflows_main");
