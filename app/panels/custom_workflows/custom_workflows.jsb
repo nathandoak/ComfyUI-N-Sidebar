@@ -319,6 +319,10 @@ var custom_workflows = (function () {
     
         // Add Event Handlers
         const custom_workflows_main = document.getElementById("custom_workflows_main");
+
+        custom_workflows_main.querySelectorAll(".sidebarItem").forEach(function(item) {
+            item.addEventListener("dblclick", handleItemDoubleclick);
+        });
         
         custom_workflows_main.querySelectorAll(".sidebarCategory").forEach(function (item) {
             item.addEventListener("dragstart", handleDragStart);
@@ -339,6 +343,10 @@ var custom_workflows = (function () {
 
 
     // Handlers
+    function handleItemDoubleclick(event) {
+        console.log(event.target);
+    }
+
     function handleDragStart(event) {
         dragItem = event.target;
     }
